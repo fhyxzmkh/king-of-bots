@@ -15,6 +15,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as RecordIndexImport } from './routes/record/index'
 import { Route as RanklistIndexImport } from './routes/ranklist/index'
 import { Route as PkIndexImport } from './routes/pk/index'
+import { Route as UserBotIndexImport } from './routes/user/bot/index'
 
 // Create/Update Routes
 
@@ -39,6 +40,12 @@ const RanklistIndexRoute = RanklistIndexImport.update({
 const PkIndexRoute = PkIndexImport.update({
   id: '/pk/',
   path: '/pk/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserBotIndexRoute = UserBotIndexImport.update({
+  id: '/user/bot/',
+  path: '/user/bot/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,6 +81,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecordIndexImport
       parentRoute: typeof rootRoute
     }
+    '/user/bot/': {
+      id: '/user/bot/'
+      path: '/user/bot'
+      fullPath: '/user/bot'
+      preLoaderRoute: typeof UserBotIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -84,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/pk': typeof PkIndexRoute
   '/ranklist': typeof RanklistIndexRoute
   '/record': typeof RecordIndexRoute
+  '/user/bot': typeof UserBotIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -91,6 +106,7 @@ export interface FileRoutesByTo {
   '/pk': typeof PkIndexRoute
   '/ranklist': typeof RanklistIndexRoute
   '/record': typeof RecordIndexRoute
+  '/user/bot': typeof UserBotIndexRoute
 }
 
 export interface FileRoutesById {
@@ -99,14 +115,15 @@ export interface FileRoutesById {
   '/pk/': typeof PkIndexRoute
   '/ranklist/': typeof RanklistIndexRoute
   '/record/': typeof RecordIndexRoute
+  '/user/bot/': typeof UserBotIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pk' | '/ranklist' | '/record'
+  fullPaths: '/' | '/pk' | '/ranklist' | '/record' | '/user/bot'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pk' | '/ranklist' | '/record'
-  id: '__root__' | '/' | '/pk/' | '/ranklist/' | '/record/'
+  to: '/' | '/pk' | '/ranklist' | '/record' | '/user/bot'
+  id: '__root__' | '/' | '/pk/' | '/ranklist/' | '/record/' | '/user/bot/'
   fileRoutesById: FileRoutesById
 }
 
@@ -115,6 +132,7 @@ export interface RootRouteChildren {
   PkIndexRoute: typeof PkIndexRoute
   RanklistIndexRoute: typeof RanklistIndexRoute
   RecordIndexRoute: typeof RecordIndexRoute
+  UserBotIndexRoute: typeof UserBotIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -122,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   PkIndexRoute: PkIndexRoute,
   RanklistIndexRoute: RanklistIndexRoute,
   RecordIndexRoute: RecordIndexRoute,
+  UserBotIndexRoute: UserBotIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +156,8 @@ export const routeTree = rootRoute
         "/",
         "/pk/",
         "/ranklist/",
-        "/record/"
+        "/record/",
+        "/user/bot/"
       ]
     },
     "/": {
@@ -151,6 +171,9 @@ export const routeTree = rootRoute
     },
     "/record/": {
       "filePath": "record/index.tsx"
+    },
+    "/user/bot/": {
+      "filePath": "user/bot/index.tsx"
     }
   }
 }
