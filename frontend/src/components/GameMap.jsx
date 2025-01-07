@@ -20,7 +20,7 @@ export const GameMap = () => {
         className="w-full h-full flex justify-center items-center"
         ref={parentRef}
       >
-        <canvas ref={canvasRef}></canvas>
+        <canvas ref={canvasRef} tabIndex="0"></canvas>
       </div>
     </>
   );

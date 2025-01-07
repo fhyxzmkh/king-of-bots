@@ -37,8 +37,8 @@ let last_timestamp; // 上一次执行的时刻
 const step = (timestamp) => {
   for (let obj of GAME_OBJECT) {
     if (!obj.has_called_start) {
-      obj.start();
       obj.has_called_start = true;
+      obj.start();
     } else {
       obj.timedelta = timestamp - last_timestamp;
       obj.update();
