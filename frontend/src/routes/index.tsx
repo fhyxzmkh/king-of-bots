@@ -7,6 +7,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   const navigate = useNavigate();
   return navigate({
-    to: "/pk",
+    to: "/user/account/login",
   });
 }

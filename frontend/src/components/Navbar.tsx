@@ -3,6 +3,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import useUserStore from "../store/userStore.ts";
 import { useEffect, useState } from "react";
+import { isAuthenticated, signOut } from "../utils/auth.tsx";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -22,7 +23,7 @@ const items1: MenuItem[] = [
 ];
 
 export const Navbar = () => {
-  const { user, clearUser } = useUserStore();
+  const { user, getUserInfo, clearUser } = useUserStore();
   const navigate = useNavigate();
   const [current, setCurrent] = useState("");
 
@@ -44,6 +45,13 @@ export const Navbar = () => {
     }
   }, [selected]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (!user.is_login && token) {
+      getUserInfo(token);
+    }
+  }, []);
+
   const items: MenuProps["items"] = [
     {
       label: (
@@ -62,6 +70,7 @@ export const Navbar = () => {
           className="cursor-pointer"
           onClick={() => {
             clearUser();
+            signOut();
             goLogin();
           }}
         >
@@ -104,7 +113,7 @@ export const Navbar = () => {
       </div>
 
       <Space>
-        {user.is_login ? (
+        {isAuthenticated() ? (
           <div className="hover:cursor-pointer">
             <UserOutlined className="mr-2" />
             <Dropdown menu={{ items }}>

@@ -1,6 +1,7 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Navbar } from "../components/Navbar";
+import { Button, Result } from "antd";
 
 export const Route = createRootRoute({
   component: () => (
@@ -11,6 +12,17 @@ export const Route = createRootRoute({
     </>
   ),
   notFoundComponent: () => {
-    return <p>This setting page doesn't exist!</p>;
+    return (
+      <Result
+        status="404"
+        title="404"
+        subTitle="Sorry, the page you visited does not exist."
+        extra={
+          <Button type="primary">
+            <Link to="/">Back Home</Link>
+          </Button>
+        }
+      />
+    );
   },
 });

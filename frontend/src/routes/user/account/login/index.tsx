@@ -1,65 +1,22 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Flex } from "antd";
-import useUserStore from "../../../../store/userStore.ts";
-import axios from "axios";
+import { Button, Form, Input } from "antd";
+import useUserStore from "../../../../store/userStore";
 
 export const Route = createFileRoute("/user/account/login/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { setUser } = useUserStore();
+  const { login } = useUserStore();
   const navigate = useNavigate();
 
-  const login = async (username: string, password: string) => {
-    const response = await axios.post(
-      "http://localhost:8686/api/user/account/token",
-      null,
-      {
-        params: {
-          username: username,
-          password: password,
-        },
-      },
-    );
-
-    const message: string = response.data.message;
-    const token: string = response.data.token;
-
-    if (message === "success") {
-      setUser({ username: username, token: token, is_login: true });
-      alert("Login success!");
-      // 获取用户信息
-      await getUserInfo(token);
-      // 转到pk页面
-      await navigate({
+  const onFinish = (values: any) => {
+    login(values.username, values.password).then(() => {
+      navigate({
         to: "/pk",
       });
-    } else {
-      alert("Login failed! Username or password is incorrect.");
-    }
-  };
-
-  const getUserInfo = async (token: string) => {
-    const response = await axios.get(
-      "http://localhost:8686/api/user/account/info",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-
-    const data = response.data;
-
-    if (data.message === "success") {
-      setUser({ id: data.id, avatar: data.avatar });
-    }
-  };
-
-  const onFinish = (values: any) => {
-    login(values.username, values.password);
+    });
   };
 
   return (
@@ -92,19 +49,13 @@ function RouteComponent() {
               />
             </Form.Item>
             <Form.Item>
-              <Flex justify="space-between" align="center">
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-                <a href="">Forgot password</a>
-              </Flex>
-            </Form.Item>
-
-            <Form.Item>
               <Button block type="primary" htmlType="submit">
                 Log in
               </Button>
-              or <a href="">Register now!</a>
+              or{" "}
+              <Link to="/user/account/register" className="font-black">
+                Register now!
+              </Link>
             </Form.Item>
           </Form>
         </div>
