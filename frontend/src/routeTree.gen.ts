@@ -16,6 +16,8 @@ import { Route as RecordIndexImport } from './routes/record/index'
 import { Route as RanklistIndexImport } from './routes/ranklist/index'
 import { Route as PkIndexImport } from './routes/pk/index'
 import { Route as UserBotIndexImport } from './routes/user/bot/index'
+import { Route as UserAccountRegisterIndexImport } from './routes/user/account/register/index'
+import { Route as UserAccountLoginIndexImport } from './routes/user/account/login/index'
 
 // Create/Update Routes
 
@@ -46,6 +48,18 @@ const PkIndexRoute = PkIndexImport.update({
 const UserBotIndexRoute = UserBotIndexImport.update({
   id: '/user/bot/',
   path: '/user/bot/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserAccountRegisterIndexRoute = UserAccountRegisterIndexImport.update({
+  id: '/user/account/register/',
+  path: '/user/account/register/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserAccountLoginIndexRoute = UserAccountLoginIndexImport.update({
+  id: '/user/account/login/',
+  path: '/user/account/login/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +102,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserBotIndexImport
       parentRoute: typeof rootRoute
     }
+    '/user/account/login/': {
+      id: '/user/account/login/'
+      path: '/user/account/login'
+      fullPath: '/user/account/login'
+      preLoaderRoute: typeof UserAccountLoginIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/account/register/': {
+      id: '/user/account/register/'
+      path: '/user/account/register'
+      fullPath: '/user/account/register'
+      preLoaderRoute: typeof UserAccountRegisterIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -99,6 +127,8 @@ export interface FileRoutesByFullPath {
   '/ranklist': typeof RanklistIndexRoute
   '/record': typeof RecordIndexRoute
   '/user/bot': typeof UserBotIndexRoute
+  '/user/account/login': typeof UserAccountLoginIndexRoute
+  '/user/account/register': typeof UserAccountRegisterIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -107,6 +137,8 @@ export interface FileRoutesByTo {
   '/ranklist': typeof RanklistIndexRoute
   '/record': typeof RecordIndexRoute
   '/user/bot': typeof UserBotIndexRoute
+  '/user/account/login': typeof UserAccountLoginIndexRoute
+  '/user/account/register': typeof UserAccountRegisterIndexRoute
 }
 
 export interface FileRoutesById {
@@ -116,14 +148,38 @@ export interface FileRoutesById {
   '/ranklist/': typeof RanklistIndexRoute
   '/record/': typeof RecordIndexRoute
   '/user/bot/': typeof UserBotIndexRoute
+  '/user/account/login/': typeof UserAccountLoginIndexRoute
+  '/user/account/register/': typeof UserAccountRegisterIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pk' | '/ranklist' | '/record' | '/user/bot'
+  fullPaths:
+    | '/'
+    | '/pk'
+    | '/ranklist'
+    | '/record'
+    | '/user/bot'
+    | '/user/account/login'
+    | '/user/account/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pk' | '/ranklist' | '/record' | '/user/bot'
-  id: '__root__' | '/' | '/pk/' | '/ranklist/' | '/record/' | '/user/bot/'
+  to:
+    | '/'
+    | '/pk'
+    | '/ranklist'
+    | '/record'
+    | '/user/bot'
+    | '/user/account/login'
+    | '/user/account/register'
+  id:
+    | '__root__'
+    | '/'
+    | '/pk/'
+    | '/ranklist/'
+    | '/record/'
+    | '/user/bot/'
+    | '/user/account/login/'
+    | '/user/account/register/'
   fileRoutesById: FileRoutesById
 }
 
@@ -133,6 +189,8 @@ export interface RootRouteChildren {
   RanklistIndexRoute: typeof RanklistIndexRoute
   RecordIndexRoute: typeof RecordIndexRoute
   UserBotIndexRoute: typeof UserBotIndexRoute
+  UserAccountLoginIndexRoute: typeof UserAccountLoginIndexRoute
+  UserAccountRegisterIndexRoute: typeof UserAccountRegisterIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -141,6 +199,8 @@ const rootRouteChildren: RootRouteChildren = {
   RanklistIndexRoute: RanklistIndexRoute,
   RecordIndexRoute: RecordIndexRoute,
   UserBotIndexRoute: UserBotIndexRoute,
+  UserAccountLoginIndexRoute: UserAccountLoginIndexRoute,
+  UserAccountRegisterIndexRoute: UserAccountRegisterIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -157,7 +217,9 @@ export const routeTree = rootRoute
         "/pk/",
         "/ranklist/",
         "/record/",
-        "/user/bot/"
+        "/user/bot/",
+        "/user/account/login/",
+        "/user/account/register/"
       ]
     },
     "/": {
@@ -174,6 +236,12 @@ export const routeTree = rootRoute
     },
     "/user/bot/": {
       "filePath": "user/bot/index.tsx"
+    },
+    "/user/account/login/": {
+      "filePath": "user/account/login/index.tsx"
+    },
+    "/user/account/register/": {
+      "filePath": "user/account/register/index.tsx"
     }
   }
 }
