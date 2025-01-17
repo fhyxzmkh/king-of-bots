@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { GameMapObject } from "../objects/GameMapObject";
 
-export const GameMap = () => {
+export const GameMap = ({ gameMap }) => {
   const parentRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -11,7 +11,7 @@ export const GameMap = () => {
 
     const ctx = canvas.getContext("2d");
 
-    new GameMapObject(ctx, parentRef.current);
+    new GameMapObject(ctx, parentRef.current, gameMap);
   }, []);
 
   return (
