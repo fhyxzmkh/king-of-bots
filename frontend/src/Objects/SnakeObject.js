@@ -44,7 +44,7 @@ export class SnakeObject extends GameObject {
   start() {}
 
   set_direction(d) {
-    this.direction = d;
+    this.direction = Number(d);
   }
 
   check_tail_increasing() {
@@ -72,10 +72,10 @@ export class SnakeObject extends GameObject {
       this.cells[i] = JSON.parse(JSON.stringify(this.cells[i - 1]));
     }
 
-    if (!this.gameMap.check_valid(this.next_cell)) {
-      // 下一步操作撞了，蛇瞬间去世
-      this.status = "dead";
-    }
+    // if (!this.gameMap.check_valid(this.next_cell)) {
+    //   // 下一步操作撞了，蛇瞬间去世
+    //   this.status = "dead";
+    // }
   }
 
   update_move() {

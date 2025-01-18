@@ -1,8 +1,8 @@
-const GAME_OBJECT = [];
+const GAME_OBJECTS = [];
 
 export class GameObject {
   constructor() {
-    GAME_OBJECT.push(this);
+    GAME_OBJECTS.push(this);
     this.timedelta = 0;
     this.has_called_start = false;
   }
@@ -23,10 +23,10 @@ export class GameObject {
     this.on_destroy();
 
     // 删除对象
-    for (let i in GAME_OBJECT) {
-      const obj = GAME_OBJECT[i];
+    for (let i = 0; i < GAME_OBJECTS.length; i++) {
+      const obj = GAME_OBJECTS[i];
       if (obj === this) {
-        GAME_OBJECT.splice(i, 1);
+        GAME_OBJECTS.splice(i, 1);
         break;
       }
     }
@@ -35,7 +35,7 @@ export class GameObject {
 
 let last_timestamp; // 上一次执行的时刻
 const step = (timestamp) => {
-  for (let obj of GAME_OBJECT) {
+  for (let obj of GAME_OBJECTS) {
     if (!obj.has_called_start) {
       obj.has_called_start = true;
       obj.start();
