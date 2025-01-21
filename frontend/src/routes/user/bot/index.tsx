@@ -160,8 +160,10 @@ function RouteComponent() {
         alert("Bot created successfully!");
         fetchTableData();
         setIsModalOpen(false);
+      } else if (message === "too many bots") {
+        alert("You have too many bots!");
       } else {
-        alert("Failed to create bot!");
+        alert("Failed to create bot!\n" + message);
       }
     };
 

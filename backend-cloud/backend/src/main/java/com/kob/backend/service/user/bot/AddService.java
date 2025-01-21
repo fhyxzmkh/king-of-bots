@@ -1,5 +1,6 @@
 package com.kob.backend.service.user.bot;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kob.backend.entity.Bot;
 import com.kob.backend.entity.User;
 import com.kob.backend.mapper.BotMapper;
@@ -48,6 +49,13 @@ public class AddService {
 
         if (description.length() > 300) {
             response.put("message", "description is too long");
+            return response;
+        }
+
+        QueryWrapper<Bot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", user.getId());
+        if (botMapper.selectCount(queryWrapper) >= 10) {
+            response.put("message", "too many bots");
             return response;
         }
 

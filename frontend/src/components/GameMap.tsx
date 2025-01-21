@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { GameMapObject } from "../objects/GameMapObject.js";
 import usePkStore from "../store/pkStore.js";
 
-export const GameMap = () => {
+export const GameMap = ({ recordParams }) => {
   const parentRef = useRef(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -19,6 +19,7 @@ export const GameMap = () => {
       parentRef.current,
       game_map,
       socket,
+      recordParams,
     );
     setGameMapObject(gameMapObj);
   }, []);
@@ -26,7 +27,7 @@ export const GameMap = () => {
   return (
     <>
       <div
-        className="w-full h-full flex justify-center items-center"
+        className="w-full h-full min-h-96 flex justify-center items-center"
         ref={parentRef}
       >
         <canvas ref={canvasRef} tabIndex={0}></canvas>

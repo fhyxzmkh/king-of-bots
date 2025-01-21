@@ -99,6 +99,11 @@
             <artifactId>fastjson</artifactId>
             <version>2.0.54</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
+            <version>3.5.9</version>
+        </dependency>
     </dependencies>
 
     <build>

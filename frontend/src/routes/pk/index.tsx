@@ -184,7 +184,7 @@ function RouteComponent() {
     <>
       {status === Status.Playing ? (
         <div className="mx-auto w-3/5 mt-4 h-[70vh]">
-          <GameMap />
+          <GameMap recordParams={null} />
         </div>
       ) : null}
       {status === Status.Matching ? (

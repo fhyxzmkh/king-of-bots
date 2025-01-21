@@ -3,13 +3,19 @@ import { WallObject } from "./WallObject.js";
 import { SnakeObject } from "./SnakeObject.js";
 
 export class GameMapObject extends GameObject {
-  constructor(ctx, parent, gameMap, socket) {
+  constructor(ctx, parent, gameMap, socket, recordParams) {
     super();
 
     this.ctx = ctx;
     this.parent = parent;
-    this.game_map = gameMap;
     this.socket = socket;
+
+    if (recordParams !== null) {
+      this.record_params = recordParams;
+      this.game_map = JSON.parse(recordParams.record.map);
+    } else {
+      this.game_map = gameMap;
+    }
 
     this.L = 0;
     this.rows = 13;
@@ -41,19 +47,42 @@ export class GameMapObject extends GameObject {
   }
 
   add_listening_events() {
-    this.ctx.canvas.focus();
-    this.ctx.canvas.addEventListener("keydown", (e) => {
-      let d = -1;
+    if (this.record_params) {
+      let k = 0;
+      const a_steps = this.record_params.record.asteps.toString();
+      const b_steps = this.record_params.record.bsteps.toString();
+      const loser = this.record_params.record.loser;
+      const [snake0, snake1] = this.snakes;
+      const intervalId = setInterval(() => {
+        if (k >= a_steps.length - 1) {
+          if (loser === "all" || loser === "A") {
+            snake0.status = "dead";
+          }
+          if (loser === "all" || loser === "B") {
+            snake1.status = "dead";
+          }
+          clearInterval(intervalId);
+        } else {
+          snake0.set_direction(parseInt(a_steps[k]));
+          snake1.set_direction(parseInt(b_steps[k]));
+        }
+        k++;
+      }, 300);
+    } else {
+      this.ctx.canvas.focus();
+      this.ctx.canvas.addEventListener("keydown", (e) => {
+        let d = -1;
 
-      if (e.key === "w") d = 0;
-      else if (e.key === "d") d = 1;
-      else if (e.key === "s") d = 2;
-      else if (e.key === "a") d = 3;
+        if (e.key === "w") d = 0;
+        else if (e.key === "d") d = 1;
+        else if (e.key === "s") d = 2;
+        else if (e.key === "a") d = 3;
 
-      if (d >= 0) {
-        this.socket.send(JSON.stringify({ event: "move", direction: d }));
-      }
-    });
+        if (d >= 0) {
+          this.socket.send(JSON.stringify({ event: "move", direction: d }));
+        }
+      });
+    }
   }
 
   start() {
