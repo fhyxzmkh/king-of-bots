@@ -14,6 +14,10 @@ public class Player {
 
     private Integer id;
 
+    private Integer botId; // -1表示人工，否则为AI
+
+    private String botCode;
+
     private Integer sx;
 
     private Integer sy;

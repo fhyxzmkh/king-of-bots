@@ -2,8 +2,11 @@ package com.kob.backend.consumer.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.WebSocketServer;
+import com.kob.backend.entity.Bot;
 import com.kob.backend.entity.Record;
 import lombok.Getter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 
 import java.util.ArrayList;
@@ -40,15 +43,27 @@ public class Game extends Thread{
 
     private Integer nextStepB = null;
 
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
-    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Integer idB) {
+    private final static String addBotUrl = "http://127.0.0.1:8688/api/bot/add";
+
+    private static boolean isFirst = true;
+
+
+    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB, Bot botB) {
         this.rows = rows;
         this.cols = cols;
         this.inner_walls_count = inner_walls_count;
         this.g = new boolean[rows][cols];
-        this.playerA = new Player(idA, rows - 2, 1, new ArrayList<>());
-        this.playerB = new Player(idB, 1, cols - 2, new ArrayList<>());
+
+        Integer botAId = (botA == null ? -1 : botA.getId());
+        String botACode = (botA == null ? "" : botA.getContent());
+
+        Integer botBId = (botB == null ? -1 : botB.getId());
+        String botBCode = (botB == null ? "" : botB.getContent());
+
+        this.playerA = new Player(idA, botAId, botACode, rows - 2, 1, new ArrayList<>());
+        this.playerB = new Player(idB, botBId, botBCode, 1, cols - 2, new ArrayList<>());
     }
 
     // 检查从 (sx, sy) 到 (tx, ty) 是否连通
@@ -144,6 +159,48 @@ public class Game extends Thread{
         }
     }
 
+    private String getInput(Player player) {
+        Player me, you;
+
+        if (playerA.getId().equals(player.getId())) {
+            me = playerA;
+            you = playerB;
+        } else {
+            me = playerB;
+            you = playerA;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(JSONObject.toJSONString(g))
+                .append("#")
+                .append(me.getSx())
+                .append("#")
+                .append(me.getSy())
+                .append("#(")
+                .append(me.getStepString())
+                .append(")#")
+                .append(you.getSx())
+                .append("#")
+                .append(you.getSy())
+                .append("#(")
+                .append(you.getStepString())
+                .append(")");
+
+        return stringBuilder.toString();
+    }
+
+    private void sendBotCode(Player player) {
+        if (player.getBotId().equals(-1)) return ;
+
+        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("user_id", player.getId().toString());
+        data.add("bot_code", player.getBotCode());
+        data.add("input", getInput(player));
+
+        WebSocketServer.restTemplate.postForObject(addBotUrl, data, String.class);
+    }
+
     private boolean nextStep() {
         // 等待两个玩家的下一步操作
 
@@ -152,6 +209,9 @@ public class Game extends Thread{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        sendBotCode(playerA);
+        sendBotCode(playerB);
 
         // 每个回合每个用户有10s时间操作 100 * 100 = 10000ms = 10s
         for (int i = 0; i < 100; ++ i) {
@@ -267,6 +327,17 @@ public class Game extends Thread{
 
     @Override
     public void run() {
+
+        if (isFirst) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                isFirst = false;
+            }
+        }
+
         for (int i = 0; i < 1000; i ++ ) {
             if (nextStep()) {  // 是否获取了两条蛇的下一步操作
                 judge();

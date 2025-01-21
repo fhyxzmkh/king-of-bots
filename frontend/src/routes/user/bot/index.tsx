@@ -41,6 +41,8 @@ function RouteComponent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
 
+  const [form2] = Form.useForm();
+
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "名称",
@@ -84,6 +86,7 @@ function RouteComponent() {
     content: "",
     create_time: "",
   });
+
   const handleChange = (bot_id: string) => {
     const botToEdit = data.find((item) => item.key === bot_id);
     if (botToEdit !== undefined) setSelectedBot(botToEdit);
@@ -184,6 +187,7 @@ function RouteComponent() {
       const message: string = response.data.message;
       if (message === "success") {
         alert("Bot updated successfully!");
+        await fetchTableData();
         setIsModalOpen2(false);
       } else {
         alert("Failed to update bot!");
@@ -279,6 +283,7 @@ function RouteComponent() {
       >
         <Divider />
         <Form
+          form={form2} // 传递 form 实例
           layout="vertical"
           onFinish={onFinish2}
           initialValues={{

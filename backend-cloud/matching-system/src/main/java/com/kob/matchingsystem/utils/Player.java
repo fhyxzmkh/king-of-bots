@@ -15,4 +15,6 @@ public class Player {
 
     private Integer waitingTime;
 
+    private Integer botId;
+
 }

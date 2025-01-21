@@ -10,7 +10,7 @@ interface EditorComponentProps {
 
 export function EditorComponent({
   height = "20vh",
-  defaultLanguage = "cpp",
+  defaultLanguage = "Java",
   value,
   onChange,
 }: EditorComponentProps) {

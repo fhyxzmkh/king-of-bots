@@ -1,11 +1,12 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { GameMap } from "../../components/GameMap.tsx";
 import { isAuthenticated } from "../../utils/auth.tsx";
 import { useEffect, useState } from "react";
 import usePkStore, { Status } from "../../store/pkStore.ts";
 import userStore from "../../store/userStore.ts";
-import { Avatar, Button, Col, Modal, Row, Space } from "antd";
+import { Avatar, Button, Col, Modal, Row, Select, Space } from "antd";
 import useUserStore from "../../store/userStore.ts";
+import axios from "axios";
 
 export const Route = createFileRoute("/pk/")({
   beforeLoad: async () => {
@@ -35,6 +36,10 @@ function RouteComponent() {
   } = usePkStore();
 
   const [buttonText, setButtonText] = useState<string>("开始匹配");
+
+  const [botList, setBotList] = useState([]);
+
+  const [selectedBot, setSelectedBot] = useState("-1");
 
   useEffect(() => {
     reset();
@@ -110,7 +115,9 @@ function RouteComponent() {
     if (buttonText === "开始匹配") {
       setButtonText("取消匹配");
       setStatus(Status.Matching);
-      socket?.send(JSON.stringify({ event: "start-matching" }));
+      socket?.send(
+        JSON.stringify({ event: "start-matching", bot_id: selectedBot }),
+      );
     } else {
       setButtonText("开始匹配");
       socket?.send(JSON.stringify({ event: "stop-matching" }));
@@ -153,6 +160,26 @@ function RouteComponent() {
     });
   }, [loser]);
 
+  const fetchBotList = async () => {
+    const response = await axios({
+      method: "get",
+      url: "http://localhost:8686/api/user/bot/getList",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      setBotList(response.data);
+      console.log("bots: ");
+      console.log(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchBotList();
+  }, []);
+
   return (
     <>
       {status === Status.Playing ? (
@@ -163,17 +190,25 @@ function RouteComponent() {
       {status === Status.Matching ? (
         <div className="mx-auto w-3/5 mt-4 h-[70vh] bg-gray-100 flex flex-col justify-center items-center">
           <Row className="h-3/5 w-full flex justify-center items-center">
-            <Col
-              span={12}
-              className="flex flex-col justify-center items-center"
-            >
+            <Col span={8} className="flex flex-col justify-center items-center">
               <Avatar size={128} icon={<img src={user.avatar} alt="我" />} />
               <p className="font-bold text-xl mt-2">{user.username}</p>
             </Col>
-            <Col
-              span={12}
-              className="flex flex-col justify-center items-center"
-            >
+            <Col span={8} className="w-full flex justify-center">
+              <Select
+                className="w-1/2"
+                defaultValue="-1"
+                onChange={(value: string) => setSelectedBot(value)}
+                options={[
+                  { value: "-1", label: "亲自上阵" },
+                  ...botList.map((bot) => ({
+                    value: bot.id.toString(),
+                    label: bot.title.toString(),
+                  })),
+                ]}
+              />
+            </Col>
+            <Col span={8} className="flex flex-col justify-center items-center">
               <Avatar
                 size={128}
                 icon={<img src={opponent_avatar} alt="我的对手" />}
