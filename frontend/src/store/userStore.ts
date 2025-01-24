@@ -26,7 +26,7 @@ const useUserStore = create<UserState>((set, get) => ({
   clearUser: () => set({ user: initialState }),
   login: async (username: string, password: string) => {
     const response = await axios.post(
-      "http://localhost:8686/api/user/account/token",
+      "http://101.43.35.186:8686/api/user/account/token",
       null,
       {
         params: {
@@ -48,7 +48,8 @@ const useUserStore = create<UserState>((set, get) => ({
   getUserInfo: async (token: string) => {
     try {
       const response = await axios.get(
-        "http://localhost:8686/api/user/account/info",
+        //"http://localhost:8686/api/user/account/info",
+        "http://101.43.35.186:8686/api/user/account/info",
         {
           headers: {
             Authorization: `Bearer ${token}`,

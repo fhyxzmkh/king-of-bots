@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+// @ts-ignore
 import { GameMapObject } from "../objects/GameMapObject.js";
 import usePkStore from "../store/pkStore.js";
 
+// @ts-ignore
 export const GameMap = ({ recordParams }) => {
   const parentRef = useRef(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);

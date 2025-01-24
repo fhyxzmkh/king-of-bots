@@ -33,7 +33,7 @@ function RouteComponent() {
     {
       title: "玩家",
       key: "player",
-      render: (_, user) => (
+      render: (_, user: any) => (
         <Space>
           <img
             src={user.avatar}
@@ -51,11 +51,11 @@ function RouteComponent() {
     },
   ];
 
-  const fetchData = async (page, size) => {
+  const fetchData = async (page: any, size: any) => {
     setIsLoading(true); // 开始加载
     const response = await axios({
       method: "get",
-      url: "http://localhost:8686/api/ranklist/getList",
+      url: "http://101.43.35.186:8686/api/ranklist/getList",
       headers: {
         Authorization: `Bearer ${useUserStore.getState().user.token}`,
       },
@@ -65,7 +65,7 @@ function RouteComponent() {
       },
     });
 
-    const formattedRecords = response.data.users.map((user) => ({
+    const formattedRecords = response.data.users.map((user: any) => ({
       ...user,
       key: user.id,
     }));

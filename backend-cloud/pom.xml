@@ -23,6 +23,8 @@
     </developers>
     <modules>
         <module>matching-system</module>
+        <module>bot-running-system</module>
+        <module>backend</module>
     </modules>
     <scm>
         <connection/>

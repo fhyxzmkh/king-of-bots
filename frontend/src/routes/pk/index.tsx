@@ -43,7 +43,7 @@ function RouteComponent() {
 
   useEffect(() => {
     reset();
-    const socketUrl = `ws://localhost:8686/api/websocket/${user.token}`;
+    const socketUrl = `ws://101.43.35.186:8686/api/websocket/${user.token}`;
     const socket = new WebSocket(socketUrl);
 
     // 监听连接成功事件
@@ -163,7 +163,7 @@ function RouteComponent() {
   const fetchBotList = async () => {
     const response = await axios({
       method: "get",
-      url: "http://localhost:8686/api/user/bot/getList",
+      url: "http://101.43.35.186:8686/api/user/bot/getList",
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -201,7 +201,7 @@ function RouteComponent() {
                 onChange={(value: string) => setSelectedBot(value)}
                 options={[
                   { value: "-1", label: "亲自上阵" },
-                  ...botList.map((bot) => ({
+                  ...botList.map((bot: any) => ({
                     value: bot.id.toString(),
                     label: bot.title.toString(),
                   })),

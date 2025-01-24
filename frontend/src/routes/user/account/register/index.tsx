@@ -15,7 +15,7 @@ function RouteComponent() {
     confirmPassword: string,
   ) => {
     const response = await axios.post(
-      "http://localhost:8686/api/user/account/register",
+      "http://101.43.35.186:8686/api/user/account/register",
       null,
       {
         params: {

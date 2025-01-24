@@ -96,7 +96,7 @@ function RouteComponent() {
   const handleDelete = async (bot_id: string) => {
     const response = await axios({
       method: "post",
-      url: "http://localhost:8686/api/user/bot/remove",
+      url: "http://101.43.35.186:8686/api/user/bot/remove",
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -117,14 +117,14 @@ function RouteComponent() {
   const fetchTableData = async () => {
     const response = await axios({
       method: "get",
-      url: "http://localhost:8686/api/user/bot/getList",
+      url: "http://101.43.35.186:8686/api/user/bot/getList",
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     });
 
     if (response.status === 200) {
-      const tableData = response.data.map((bot) => ({
+      const tableData = response.data.map((bot: any) => ({
         key: bot.id,
         name: bot.title,
         description: bot.description,
@@ -144,7 +144,7 @@ function RouteComponent() {
     const addBot = async () => {
       const response = await axios({
         method: "post",
-        url: "http://localhost:8686/api/user/bot/add",
+        url: "http://101.43.35.186:8686/api/user/bot/add",
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -174,7 +174,7 @@ function RouteComponent() {
     const updateBot = async () => {
       const response = await axios({
         method: "post",
-        url: "http://localhost:8686/api/user/bot/update",
+        url: "http://101.43.35.186:8686/api/user/bot/update",
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

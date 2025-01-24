@@ -40,7 +40,7 @@ function RouteComponent() {
     {
       title: "玩家A",
       key: "playerA",
-      render: (_, record) => (
+      render: (_, record: any) => (
         <Space>
           <img
             src={record.a_avatar}
@@ -54,7 +54,7 @@ function RouteComponent() {
     {
       title: "玩家B",
       key: "playerB",
-      render: (_, record) => (
+      render: (_, record: any) => (
         <Space>
           <img
             src={record.b_avatar}
@@ -89,7 +89,7 @@ function RouteComponent() {
     {
       title: "操作",
       key: "action",
-      render: (_, record) => (
+      render: (_, record: any) => (
         <Space size="middle">
           <Button
             color="primary"
@@ -106,11 +106,11 @@ function RouteComponent() {
     },
   ];
 
-  const fetchData = async (page, size) => {
+  const fetchData = async (page: any, size: any) => {
     setIsLoading(true); // 开始加载
     const response = await axios({
       method: "get",
-      url: "http://localhost:8686/api/record/getList",
+      url: "http://101.43.35.186:8686/api/record/getList",
       headers: {
         Authorization: `Bearer ${useUserStore.getState().user.token}`,
       },
@@ -120,7 +120,7 @@ function RouteComponent() {
       },
     });
 
-    const formattedRecords = response.data.records.map((record) => ({
+    const formattedRecords = response.data.records.map((record: any) => ({
       ...record,
       key: record.record.id,
     }));
